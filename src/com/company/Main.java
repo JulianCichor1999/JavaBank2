@@ -12,12 +12,21 @@ public class Main extends JFrame implements Runnable {
     private JMenu plik;
     private JMenuItem miWyloguj, miZamknij;
 
-    private JButton buttonPotwierdzenie;
-    private JTextField textNumerKartyPole;
-    private JTextField textPinPole;
+
     private JLabel labelPrzywitanieKarta;
     private JLabel labelPodajPin;
+    private JLabel labelPowitaniePoImieniu;
+
+    private JTextField textNumerKartyPole;
+    private JTextField textPinPole;
+
+    private JButton buttonPotwierdzenie;
+    private JButton buttonWyswietlSrodki;
+    private JButton buttonWyplacPieniadze;
+    private JButton buttonWplacPieniadze;
+
     private ImageIcon karta;
+
 
     private JPanel panelPowitalny;
     private JPanel panelPowitalnyPin;
@@ -36,7 +45,11 @@ public class Main extends JFrame implements Runnable {
         setLocation(dim.width / 4, dim.height / 4);
         setContentPane(new JPanel());
 
-        //        zamykanie okna
+//        pobranie danych uzytkownika
+        String imie = "Jan", nazwisko = "Kowalski";
+        double srodki = 50.25;
+
+//        zamykanie okna
         WindowClosingListener windowClosingListener = new WindowClosingListener();
         addWindowListener(windowClosingListener);
 
@@ -56,7 +69,7 @@ public class Main extends JFrame implements Runnable {
         plik.add(miWyloguj);
         plik.add(miZamknij);
 
-//        ustawianie elementow w oknie
+//        elemety do paneli poczatkowych
         textNumerKartyPole = new JTextField(10);
         textPinPole = new JTextField(4);
         buttonPotwierdzenie = new JButton("Potwierdź");
@@ -64,11 +77,18 @@ public class Main extends JFrame implements Runnable {
         labelPodajPin = new JLabel("Podaj PIN:");
         karta = new ImageIcon("citi-simplicity-300x194.png");
 
+//        elementy do panelu opcje
+        labelPowitaniePoImieniu = new JLabel(String.format("Sz. P. %s %s", imie, nazwisko));
+        buttonWyswietlSrodki = new JButton("Wyświetl środki");
+        buttonWyplacPieniadze = new JButton("Wypłać pieniądze");
+        buttonWplacPieniadze = new JButton("Wpłać pieniądze");
+
 //        panel powitalny
         panelPowitalny = new JPanel();
         BoxLayout layoutPowitalny = new BoxLayout(panelPowitalny,BoxLayout.Y_AXIS);
         panelPowitalny.setLayout(layoutPowitalny);
         labelPrzywitanieKarta.setIcon(karta);
+
         panelPowitalny.add(labelPrzywitanieKarta);
         panelPowitalny.add(textNumerKartyPole);
         panelPowitalny.add(buttonPotwierdzenie);
@@ -78,6 +98,7 @@ public class Main extends JFrame implements Runnable {
         BoxLayout layoutPowitalnyPin = new BoxLayout(panelPowitalnyPin,BoxLayout.Y_AXIS);
         panelPowitalnyPin.setLayout(layoutPowitalnyPin);
         labelPrzywitanieKarta.setIcon(karta);
+
         panelPowitalnyPin.add(labelPrzywitanieKarta);
         panelPowitalnyPin.add(textNumerKartyPole);
         panelPowitalnyPin.add(labelPodajPin);
@@ -89,6 +110,10 @@ public class Main extends JFrame implements Runnable {
         BoxLayout layoutOpcje = new BoxLayout(panelOpcje,BoxLayout.Y_AXIS);
         panelOpcje.setLayout(layoutOpcje);
 
+        panelOpcje.add(labelPowitaniePoImieniu);
+        panelOpcje.add(buttonWyswietlSrodki);
+        panelOpcje.add(buttonWyplacPieniadze);
+        panelOpcje.add(buttonWplacPieniadze);
 
         add(panelOpcje);
 
