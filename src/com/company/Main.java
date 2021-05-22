@@ -14,8 +14,13 @@ public class Main extends JFrame implements Runnable {
 
     private JButton potwierdzenie;
     private JTextField numerKartyPole;
-    private JLabel przywitanie;
+    private JTextField pinPole;
+    private JLabel textPrzywitanieKarta;
+    private JLabel textPodajPin;
     private ImageIcon karta;
+
+    private JPanel panelPowitalny;
+    private JPanel panelPowitalnyPin;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Main("Bank"));
@@ -52,17 +57,39 @@ public class Main extends JFrame implements Runnable {
 
 //        ustawianie elementow w oknie
         numerKartyPole = new JTextField(10);
-        potwierdzenie = new JButton("Przejdź dalej");
-        przywitanie = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
+        pinPole = new JTextField(4);
+        potwierdzenie = new JButton("Potwierdź");
+        textPrzywitanieKarta = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
+        textPodajPin = new JLabel("Podaj PIN:");
         karta = new ImageIcon("citi-simplicity-300x194.png");
-        JPanel panel = new JPanel();
-        BoxLayout layout = new BoxLayout(panel,BoxLayout.Y_AXIS);
-        panel.setLayout(layout);
-        przywitanie.setIcon(karta);
-        panel.add(przywitanie);
-        panel.add(numerKartyPole);
-        panel.add(potwierdzenie);
-        add(panel);
+
+//        panel powitalny
+        panelPowitalny = new JPanel();
+        BoxLayout layoutPowitalny = new BoxLayout(panelPowitalny,BoxLayout.Y_AXIS);
+        panelPowitalny.setLayout(layoutPowitalny);
+        textPrzywitanieKarta.setIcon(karta);
+        panelPowitalny.add(textPrzywitanieKarta);
+        panelPowitalny.add(numerKartyPole);
+        panelPowitalny.add(potwierdzenie);
+
+//        panel powitalny z pinem
+        panelPowitalnyPin = new JPanel();
+        BoxLayout layoutPowitalnyPin = new BoxLayout(panelPowitalnyPin,BoxLayout.Y_AXIS);
+        panelPowitalnyPin.setLayout(layoutPowitalnyPin);
+        textPrzywitanieKarta.setIcon(karta);
+        panelPowitalnyPin.add(textPrzywitanieKarta);
+        panelPowitalnyPin.add(numerKartyPole);
+        panelPowitalnyPin.add(textPodajPin);
+        panelPowitalnyPin.add(pinPole);
+        panelPowitalnyPin.add(potwierdzenie);
+
+
+
+
+
+
+        add(panelPowitalnyPin);
+
         potwierdzenie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
