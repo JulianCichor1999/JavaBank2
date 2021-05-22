@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class Main extends JFrame implements Runnable {
     private JMenuBar menuGlowne;
@@ -14,7 +15,10 @@ public class Main extends JFrame implements Runnable {
 
 
     private JLabel labelPrzywitanieKarta;
+    private JLabel labelPodajNrKarty;
     private JLabel labelPodajPin;
+    private JLabel labelPrzywitanieInfoNrKarty;
+    private JLabel labelBledneDane;
     private JLabel labelPowitaniePoImieniu;
 
     private JTextField textNumerKartyPole;
@@ -28,9 +32,13 @@ public class Main extends JFrame implements Runnable {
     private ImageIcon karta;
 
 
+    private int numerAktywnegoPanelu;
     private JPanel panelPowitalny;
-    private JPanel panelPowitalnyPin;
+    //    private JPanel panelPowitalnyPin;
     private JPanel panelOpcje;
+
+    ArrayList<KartaPlatnicza> klienci;
+    KartaPlatnicza kartaPlatnicza;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Main("Bank"));
@@ -44,6 +52,9 @@ public class Main extends JFrame implements Runnable {
         setSize(new Dimension(dim.width / 2, dim.height / 2));
         setLocation(dim.width / 4, dim.height / 4);
         setContentPane(new JPanel());
+
+//        wczytanie kart
+        klienci = Reader.getKlienci();
 
 //        pobranie danych uzytkownika
         String imie = "Jan", nazwisko = "Kowalski";
@@ -73,9 +84,11 @@ public class Main extends JFrame implements Runnable {
         textNumerKartyPole = new JTextField(10);
         textPinPole = new JTextField(4);
         buttonPotwierdzenie = new JButton("Potwierdź");
-        labelPrzywitanieKarta = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
+        labelPrzywitanieKarta = new JLabel();
+        labelPodajNrKarty = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
         labelPodajPin = new JLabel("Podaj PIN:");
         karta = new ImageIcon("citi-simplicity-300x194.png");
+        labelBledneDane = new JLabel("Podałeś błędne dane!");
 
 //        elementy do panelu opcje
         labelPowitaniePoImieniu = new JLabel(String.format("Sz. P. %s %s", imie, nazwisko));
@@ -89,21 +102,13 @@ public class Main extends JFrame implements Runnable {
         panelPowitalny.setLayout(layoutPowitalny);
         labelPrzywitanieKarta.setIcon(karta);
 
+        numerAktywnegoPanelu = 1;
         panelPowitalny.add(labelPrzywitanieKarta);
+        panelPowitalny.add(labelPodajNrKarty);
         panelPowitalny.add(textNumerKartyPole);
         panelPowitalny.add(buttonPotwierdzenie);
+//        elementy po poprawnym wykryciu numeru karty
 
-//        panel powitalny z pinem
-        panelPowitalnyPin = new JPanel();
-        BoxLayout layoutPowitalnyPin = new BoxLayout(panelPowitalnyPin,BoxLayout.Y_AXIS);
-        panelPowitalnyPin.setLayout(layoutPowitalnyPin);
-        labelPrzywitanieKarta.setIcon(karta);
-
-        panelPowitalnyPin.add(labelPrzywitanieKarta);
-        panelPowitalnyPin.add(textNumerKartyPole);
-        panelPowitalnyPin.add(labelPodajPin);
-        panelPowitalnyPin.add(textPinPole);
-        panelPowitalnyPin.add(buttonPotwierdzenie);
 
 //        panel z opcjami - po zalogowaniu
         panelOpcje = new JPanel();
@@ -115,26 +120,90 @@ public class Main extends JFrame implements Runnable {
         panelOpcje.add(buttonWyplacPieniadze);
         panelOpcje.add(buttonWplacPieniadze);
 
-        add(panelOpcje);
+        add(panelPowitalny);
 
         buttonPotwierdzenie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(textNumerKartyPole.getText().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Podaj numer swojej karty płatniczej!");
+                boolean jestKarta = false;
+
+                if (numerAktywnegoPanelu == 1) {
+                    kartaPlatnicza = new KartaPlatnicza();
+                    for (KartaPlatnicza kp : klienci) {
+                        jestKarta = kp.getNumerKarty().equals(textNumerKartyPole.getText().replaceAll("\\s+", ""));
+                        if (jestKarta) {
+                            if (kp.getProducentKarty().toString().equals("visa")) {
+                                kartaPlatnicza = new KartaPlatniczaVisa(
+                                        kp.getImie(), kp.getNazwisko(), kp.getNumerKarty(), kp.getPIN(), kp.getSrodki());
+                            } else if (kp.getProducentKarty().toString().equals("mastercard")) {
+                                kartaPlatnicza = new KartaPlatniczaMastercard(
+                                        kp.getImie(), kp.getNazwisko(), kp.getNumerKarty(), kp.getPIN(), kp.getSrodki());
+                            }
+                            break;
+                        }
+                    }
+
+                    if (jestKarta) {
+//                      gdy uzytkownik podal poprawnie nr karty
+                        labelPrzywitanieInfoNrKarty = new JLabel(String.format("Numer karty: %s", textNumerKartyPole.getText()));
+                        numerAktywnegoPanelu = 2;
+                        panelPowitalny.add(labelPrzywitanieKarta);
+                        panelPowitalny.add(labelPrzywitanieInfoNrKarty);
+                        panelPowitalny.remove(labelPodajNrKarty);
+                        panelPowitalny.remove(textNumerKartyPole);
+                        panelPowitalny.add(labelPodajPin);
+                        panelPowitalny.add(textPinPole);
+                        panelPowitalny.remove(labelBledneDane);
+                    } else {
+//                      gdy uzytkownik podal błędny nr karty
+                        labelBledneDane = new JLabel("Nie ma takiej karty w bazie!");
+                        panelPowitalny.add(labelPrzywitanieKarta);
+                        panelPowitalny.add(labelBledneDane);
+                        panelPowitalny.add(labelPodajNrKarty);
+                        panelPowitalny.add(textNumerKartyPole);
+                    }
+                    panelPowitalny.add(buttonPotwierdzenie);
+                    SwingUtilities.updateComponentTreeUI(panelPowitalny);
+                } else if (numerAktywnegoPanelu == 2) {
+                    if (textPinPole.getText().length() != 0) {
+                        if (kartaPlatnicza.getPIN() == Short.parseShort(textPinPole.getText())) {
+//                        gdy użytkownik podał poprawny kod PIN
+                            numerAktywnegoPanelu = 3;
+                            remove(panelPowitalny);
+                            add(panelOpcje);
+                            System.out.println("test");
+                        } else {
+//                      gdy uzytkownik podal bledny PIN
+                            labelBledneDane = new JLabel("Podałeś błędny PIN!");
+                            numerAktywnegoPanelu = 1;
+                            panelPowitalny.remove(labelPrzywitanieInfoNrKarty);
+                            panelPowitalny.add(labelBledneDane);
+                            panelPowitalny.add(labelPrzywitanieKarta);
+                            panelPowitalny.add(textNumerKartyPole);
+                            panelPowitalny.remove(labelPodajPin);
+                            panelPowitalny.remove(textPinPole);
+                            panelPowitalny.add(buttonPotwierdzenie);
+                            SwingUtilities.updateComponentTreeUI(panelPowitalny);
+                        }
+                    }
                 }
-                if(textPinPole.getText().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Podaj PIN swojej karty płatniczej!");
-                }
-                if(textNumerKartyPole.getText().isEmpty() && textPinPole.getText().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Podaj numer swojej karty płatniczej i jej PIN!");
-                }
+
+
+//                if(textNumerKartyPole.getText().isEmpty())
+//                {
+//                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
+//                            "Podaj numer swojej karty płatniczej!");
+//                }
+//                if(textPinPole.getText().isEmpty())
+//                {
+//                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
+//                            "Podaj PIN swojej karty płatniczej!");
+//                }
+//                if(textNumerKartyPole.getText().isEmpty() && textPinPole.getText().isEmpty())
+//                {
+//                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
+//                            "Podaj numer swojej karty płatniczej i jej PIN!");
+//                }
             }
         });
     }
