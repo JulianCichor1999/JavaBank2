@@ -93,15 +93,15 @@ public class Main extends JFrame implements Runnable {
         potwierdzenie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(numerKartyPole.getText().isEmpty())
+                if(numerKartyPole.getText().isEmpty() || pinPole.getText().isEmpty())
                 {
                     JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Pusto!");
+                            "Podaj numer karty płatniczej lub jej PIN!");
                 }
                 else
                 {
                     JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Niepusto!");
+                            "Wszystko zostało podane!");
                 }
             }
         });
