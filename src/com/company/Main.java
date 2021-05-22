@@ -12,15 +12,16 @@ public class Main extends JFrame implements Runnable {
     private JMenu plik;
     private JMenuItem miWyloguj, miZamknij;
 
-    private JButton potwierdzenie;
-    private JTextField numerKartyPole;
-    private JTextField pinPole;
-    private JLabel textPrzywitanieKarta;
-    private JLabel textPodajPin;
+    private JButton buttonPotwierdzenie;
+    private JTextField textNumerKartyPole;
+    private JTextField textPinPole;
+    private JLabel labelPrzywitanieKarta;
+    private JLabel labelPodajPin;
     private ImageIcon karta;
 
     private JPanel panelPowitalny;
     private JPanel panelPowitalnyPin;
+    private JPanel panelOpcje;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Main("Bank"));
@@ -56,52 +57,53 @@ public class Main extends JFrame implements Runnable {
         plik.add(miZamknij);
 
 //        ustawianie elementow w oknie
-        numerKartyPole = new JTextField(10);
-        pinPole = new JTextField(4);
-        potwierdzenie = new JButton("Potwierdź");
-        textPrzywitanieKarta = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
-        textPodajPin = new JLabel("Podaj PIN:");
+        textNumerKartyPole = new JTextField(10);
+        textPinPole = new JTextField(4);
+        buttonPotwierdzenie = new JButton("Potwierdź");
+        labelPrzywitanieKarta = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
+        labelPodajPin = new JLabel("Podaj PIN:");
         karta = new ImageIcon("citi-simplicity-300x194.png");
 
 //        panel powitalny
         panelPowitalny = new JPanel();
         BoxLayout layoutPowitalny = new BoxLayout(panelPowitalny,BoxLayout.Y_AXIS);
         panelPowitalny.setLayout(layoutPowitalny);
-        textPrzywitanieKarta.setIcon(karta);
-        panelPowitalny.add(textPrzywitanieKarta);
-        panelPowitalny.add(numerKartyPole);
-        panelPowitalny.add(potwierdzenie);
+        labelPrzywitanieKarta.setIcon(karta);
+        panelPowitalny.add(labelPrzywitanieKarta);
+        panelPowitalny.add(textNumerKartyPole);
+        panelPowitalny.add(buttonPotwierdzenie);
 
 //        panel powitalny z pinem
         panelPowitalnyPin = new JPanel();
         BoxLayout layoutPowitalnyPin = new BoxLayout(panelPowitalnyPin,BoxLayout.Y_AXIS);
         panelPowitalnyPin.setLayout(layoutPowitalnyPin);
-        textPrzywitanieKarta.setIcon(karta);
-        panelPowitalnyPin.add(textPrzywitanieKarta);
-        panelPowitalnyPin.add(numerKartyPole);
-        panelPowitalnyPin.add(textPodajPin);
-        panelPowitalnyPin.add(pinPole);
-        panelPowitalnyPin.add(potwierdzenie);
+        labelPrzywitanieKarta.setIcon(karta);
+        panelPowitalnyPin.add(labelPrzywitanieKarta);
+        panelPowitalnyPin.add(textNumerKartyPole);
+        panelPowitalnyPin.add(labelPodajPin);
+        panelPowitalnyPin.add(textPinPole);
+        panelPowitalnyPin.add(buttonPotwierdzenie);
+
+//        panel z opcjami - po zalogowaniu
+        panelOpcje = new JPanel();
+        BoxLayout layoutOpcje = new BoxLayout(panelOpcje,BoxLayout.Y_AXIS);
+        panelOpcje.setLayout(layoutOpcje);
 
 
+        add(panelOpcje);
 
-
-
-
-        add(panelPowitalnyPin);
-
-        potwierdzenie.addActionListener(new ActionListener() {
+        buttonPotwierdzenie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(numerKartyPole.getText().isEmpty() || pinPole.getText().isEmpty())
+                if(textNumerKartyPole.getText().isEmpty())
                 {
                     JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Podaj numer karty płatniczej lub jej PIN!");
+                            "Pusto!");
                 }
                 else
                 {
                     JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Wszystko zostało podane!");
+                            "Niepusto!");
                 }
             }
         });
