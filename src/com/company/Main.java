@@ -123,12 +123,17 @@ public class Main extends JFrame implements Runnable {
                 if(textNumerKartyPole.getText().isEmpty())
                 {
                     JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Pusto!");
+                            "Podaj numer swojej karty płatniczej!");
                 }
-                else
+                if(textPinPole.getText().isEmpty())
                 {
                     JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-                            "Niepusto!");
+                            "Podaj PIN numer swojej karty płatniczej!");
+                }
+                if(textNumerKartyPole.getText().isEmpty() && textPinPole.getText().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
+                            "Podaj numer swojej karty płatniczej i jej PIN!");
                 }
             }
         });
