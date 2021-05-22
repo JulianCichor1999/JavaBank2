@@ -92,10 +92,10 @@ public class Main extends JFrame implements Runnable {
 
         add(panelOpcje);
 
-        potwierdzenie.addActionListener(new ActionListener() {
+        buttonPotwierdzenie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(numerKartyPole.getText().isEmpty())
+                if(textNumerKartyPole.getText().isEmpty())
                 {
                     JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
                             "Pusto!");
