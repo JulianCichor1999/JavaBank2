@@ -2,6 +2,8 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main extends JFrame implements Runnable {
 
@@ -33,6 +35,21 @@ public class Main extends JFrame implements Runnable {
         panel.add(numerKartyPole);
         panel.add(potwierdzenie);
         add(panel);
+        potwierdzenie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(numerKartyPole.getText().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
+                            "Pusto!");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
+                            "Niepusto!");
+                }
+            }
+        });
     }
 
     @Override
