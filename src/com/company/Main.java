@@ -35,6 +35,7 @@ public class Main extends JFrame implements Runnable {
     private JButton buttonWyswietlSrodki;
     private JButton buttonWyplacPieniadze;
     private JButton buttonWplacPieniadze;
+    private JButton buttonWyloguj;
 
     private ImageIcon karta;
 
@@ -60,10 +61,6 @@ public class Main extends JFrame implements Runnable {
 
 //        wczytanie kart
         klienci = Reader.getKlienci();
-
-////        pobranie danych uzytkownika
-//        String imie = "Jan", nazwisko = "Kowalski";
-//        double srodki = 50.25;
 
 //        zamykanie okna
         WindowClosingListener windowClosingListener = new WindowClosingListener();
@@ -101,6 +98,7 @@ public class Main extends JFrame implements Runnable {
         buttonWyswietlSrodki = new JButton("Wyświetl środki");
         buttonWyplacPieniadze = new JButton("Wypłać pieniądze");
         buttonWplacPieniadze = new JButton("Wpłać pieniądze");
+        buttonWyloguj = new JButton("Wyloguj się");
 
 //        inicjowanie panelu
         panelAktywny = new JPanel();
@@ -141,8 +139,34 @@ public class Main extends JFrame implements Runnable {
                 }
                 else if (numerAktywnegoPanelu == 3) {
                     changePanel(1);
+                } else {
+                    changePanel(3);
                 }
             }
+        });
+
+        buttonWyswietlSrodki.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { changePanel(4); }
+        });
+
+        buttonWyplacPieniadze.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { changePanel(5); }
+        });
+
+        buttonWplacPieniadze.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { changePanel(6); }
+        });
+
+        buttonWyloguj.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changePanel(1);
+
+                textNumerKartyPole.setText("");
+                textPinPole.setText("");}
         });
     }
 
@@ -163,20 +187,26 @@ public class Main extends JFrame implements Runnable {
             1 (default): panel do podania nr karty
             2: panel do podania nr pin
             3: panel z wyborem opcji
+            4: panel wyświetl środki
+            5: panel wypłać pieniądze
+            6: panel wpłać pieniądze
          */
         if (stage == 2) {
             numerAktywnegoPanelu = 2;
-            labelPrzywitanieInfoNrKarty = new JLabel(String.format("Numer karty: %s", textNumerKartyPole.getText()));
-            panelAktywny.add(labelPrzywitanieInfoNrKarty);
+
             panelAktywny.remove(labelPodajNrKarty);
             panelAktywny.remove(textNumerKartyPole);
+            panelAktywny.remove(labelBledneDane);
+
+            labelPrzywitanieInfoNrKarty = new JLabel(String.format("Numer karty: %s", textNumerKartyPole.getText()));
+            panelAktywny.add(labelPrzywitanieInfoNrKarty);
             panelAktywny.add(labelPodajPin);
             panelAktywny.add(textPinPole);
-            panelAktywny.remove(labelBledneDane);
 
             panelAktywny.add(buttonPotwierdzenie);
         } else if (stage == 3) {
             numerAktywnegoPanelu = 3;
+
             panelAktywny.remove(labelPrzywitanieKarta);
             panelAktywny.remove(labelPrzywitanieInfoNrKarty);
             panelAktywny.remove(labelPodajPin);
@@ -189,16 +219,40 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.add(buttonWyswietlSrodki);
             panelAktywny.add(buttonWyplacPieniadze);
             panelAktywny.add(buttonWplacPieniadze);
+            panelAktywny.add(buttonWyloguj);
 
+        } else if (stage == 4) {
+            numerAktywnegoPanelu = 4;
+
+            panelAktywny.remove(labelPowitaniePoImieniu);
+            panelAktywny.remove(buttonWyswietlSrodki);
+            panelAktywny.remove(buttonWyplacPieniadze);
+            panelAktywny.remove(buttonWplacPieniadze);
+            panelAktywny.remove(buttonWyloguj);
+
+            panelAktywny.add(buttonPotwierdzenie);
+        } else if (stage == 5) {
+            numerAktywnegoPanelu = 5;
+
+            panelAktywny.remove(labelPowitaniePoImieniu);
+            panelAktywny.remove(buttonWyswietlSrodki);
+            panelAktywny.remove(buttonWyplacPieniadze);
+            panelAktywny.remove(buttonWplacPieniadze);
+            panelAktywny.remove(buttonWyloguj);
+
+            panelAktywny.add(buttonPotwierdzenie);
+        } else if (stage == 6) {
+            numerAktywnegoPanelu = 6;
+
+            panelAktywny.remove(labelPowitaniePoImieniu);
+            panelAktywny.remove(buttonWyswietlSrodki);
+            panelAktywny.remove(buttonWyplacPieniadze);
+            panelAktywny.remove(buttonWplacPieniadze);
+            panelAktywny.remove(buttonWyloguj);
+
+            panelAktywny.add(buttonPotwierdzenie);
         } else {
             numerAktywnegoPanelu = 1;
-            panelAktywny.add(labelPrzywitanieKarta);
-            if (err != null) {
-                labelBledneDane = new JLabel("Nie ma takiej karty w bazie!");
-                panelAktywny.add(labelBledneDane);
-            }
-            panelAktywny.add(labelPodajNrKarty);
-            panelAktywny.add(textNumerKartyPole);
 
             panelAktywny.remove(labelPrzywitanieInfoNrKarty);
             panelAktywny.remove(labelPodajPin);
@@ -208,6 +262,15 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWyswietlSrodki);
             panelAktywny.remove(buttonWyplacPieniadze);
             panelAktywny.remove(buttonWplacPieniadze);
+            panelAktywny.remove(buttonWyloguj);
+
+            panelAktywny.add(labelPrzywitanieKarta);
+            if (err != null) {
+                labelBledneDane = new JLabel("Nie ma takiej karty w bazie!");
+                panelAktywny.add(labelBledneDane);
+            }
+            panelAktywny.add(labelPodajNrKarty);
+            panelAktywny.add(textNumerKartyPole);
 
             panelAktywny.add(buttonPotwierdzenie);
         }
