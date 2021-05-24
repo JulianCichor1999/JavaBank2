@@ -8,6 +8,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+/*
+to do
+okno potwierdzenia zamkniecia - gdy nacisnie sie nie -> zamyka okno
+dodac akcje do przyciskow opcje
+
+ */
+
 public class Main extends JFrame implements Runnable {
     private JMenuBar menuGlowne;
     private JMenu plik;
@@ -34,8 +41,6 @@ public class Main extends JFrame implements Runnable {
 
     private int numerAktywnegoPanelu;
     private JPanel panelAktywny;
-    //    private JPanel panelPowitalnyPin;
-//    private JPanel panelOpcje;
 
     ArrayList<KartaPlatnicza> klienci;
     KartaPlatnicza kartaPlatnicza;
@@ -56,9 +61,9 @@ public class Main extends JFrame implements Runnable {
 //        wczytanie kart
         klienci = Reader.getKlienci();
 
-//        pobranie danych uzytkownika
-        String imie = "Jan", nazwisko = "Kowalski";
-        double srodki = 50.25;
+////        pobranie danych uzytkownika
+//        String imie = "Jan", nazwisko = "Kowalski";
+//        double srodki = 50.25;
 
 //        zamykanie okna
         WindowClosingListener windowClosingListener = new WindowClosingListener();
@@ -67,7 +72,6 @@ public class Main extends JFrame implements Runnable {
 //        akcje menu oraz skroty klawiszowe
         CloseAction closeAction = new CloseAction();
         LogoutAction logoutAction = new LogoutAction();
-        ComputeAction computeAction = new ComputeAction();
 
 //        pasek menu na górze
         menuGlowne = new JMenuBar();
@@ -81,29 +85,28 @@ public class Main extends JFrame implements Runnable {
         plik.add(miZamknij);
 
 //        elemety do paneli poczatkowych
+        karta = new ImageIcon("citi-simplicity-300x194.png");
+        labelPrzywitanieKarta = new JLabel();
+        labelPrzywitanieKarta.setIcon(karta);
         textNumerKartyPole = new JTextField(10);
         textPinPole = new JTextField(4);
         buttonPotwierdzenie = new JButton("Potwierdź");
-        labelPrzywitanieKarta = new JLabel();
         labelPodajNrKarty = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
         labelPodajPin = new JLabel("Podaj PIN:");
-        karta = new ImageIcon("citi-simplicity-300x194.png");
         labelBledneDane = new JLabel("Podałeś błędne dane!");
         labelPrzywitanieInfoNrKarty = new JLabel();
 
 //        elementy do panelu opcje
-        labelPowitaniePoImieniu = new JLabel(String.format("Sz. P. %s %s", imie, nazwisko));
+        labelPowitaniePoImieniu = new JLabel("");
         buttonWyswietlSrodki = new JButton("Wyświetl środki");
         buttonWyplacPieniadze = new JButton("Wypłać pieniądze");
         buttonWplacPieniadze = new JButton("Wpłać pieniądze");
 
-//        panel powitalny
+//        inicjowanie panelu
         panelAktywny = new JPanel();
         BoxLayout layoutPowitalny = new BoxLayout(panelAktywny,BoxLayout.Y_AXIS);
         panelAktywny.setLayout(layoutPowitalny);
-        labelPrzywitanieKarta.setIcon(karta);
 
-        numerAktywnegoPanelu = 1;
         changePanel(1);
 
         add(panelAktywny);
@@ -149,13 +152,9 @@ public class Main extends JFrame implements Runnable {
         setVisible(true);
     }
 
-    private JFrame getMainWindow() {
-        return this;
-    }
+    private JFrame getMainWindow() { return this; }
 
-    private void changePanel(int stage) {
-        changePanel(stage, null);
-    }
+    private void changePanel(int stage) { changePanel(stage, null); }
 
     private void changePanel(int stage, String err) {
         panelAktywny.remove(labelBledneDane);
@@ -168,7 +167,6 @@ public class Main extends JFrame implements Runnable {
         if (stage == 2) {
             numerAktywnegoPanelu = 2;
             labelPrzywitanieInfoNrKarty = new JLabel(String.format("Numer karty: %s", textNumerKartyPole.getText()));
-//            panelAktywny.add(labelPrzywitanieKarta);
             panelAktywny.add(labelPrzywitanieInfoNrKarty);
             panelAktywny.remove(labelPodajNrKarty);
             panelAktywny.remove(textNumerKartyPole);
@@ -185,6 +183,8 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(textPinPole);
             panelAktywny.remove(buttonPotwierdzenie);
 
+            labelPowitaniePoImieniu = new JLabel(
+                    String.format("Sz. P. %s %s", kartaPlatnicza.getImie(), kartaPlatnicza.getNazwisko()));
             panelAktywny.add(labelPowitaniePoImieniu);
             panelAktywny.add(buttonWyswietlSrodki);
             panelAktywny.add(buttonWyplacPieniadze);
@@ -255,17 +255,6 @@ public class Main extends JFrame implements Runnable {
             textNumerKartyPole.setText("");
             textPinPole.setText("");
 
-        }
-    }
-
-    class ComputeAction extends AbstractAction {
-        public ComputeAction() {
-            putValue(Action.NAME, "Potwierdz");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-//            do zrobienia
         }
     }
 }
