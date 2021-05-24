@@ -236,7 +236,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(labelWyplata);
             panelAktywny.remove(textWyplacanePieniadze);
             panelAktywny.remove(labelWplata);
-            panelAktywny.remove(textWplacanePieniadze); 
+            panelAktywny.remove(textWplacanePieniadze);
 
             labelPowitaniePoImieniu = new JLabel(
                     String.format("Sz. P. %s %s", kartaPlatnicza.getImie(), kartaPlatnicza.getNazwisko()));
@@ -271,6 +271,7 @@ public class Main extends JFrame implements Runnable {
                     String.format("Ile chcesz wypłacić pieniędzy:"));
             textWyplacanePieniadze = new JTextField();
             buttonWyplac = new JButton("Wypłać");
+            buttonWyplac.addActionListener(kartaPlatnicza.wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText())));
             panelAktywny.add(labelWyplata);
             panelAktywny.add(textWyplacanePieniadze);
             panelAktywny.add(buttonPotwierdzenie);
