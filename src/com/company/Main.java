@@ -33,9 +33,9 @@ public class Main extends JFrame implements Runnable {
 
 
     private int numerAktywnegoPanelu;
-    private JPanel panelPowitalny;
+    private JPanel panelAktywny;
     //    private JPanel panelPowitalnyPin;
-    private JPanel panelOpcje;
+//    private JPanel panelOpcje;
 
     ArrayList<KartaPlatnicza> klienci;
     KartaPlatnicza kartaPlatnicza;
@@ -89,6 +89,7 @@ public class Main extends JFrame implements Runnable {
         labelPodajPin = new JLabel("Podaj PIN:");
         karta = new ImageIcon("citi-simplicity-300x194.png");
         labelBledneDane = new JLabel("Podałeś błędne dane!");
+        labelPrzywitanieInfoNrKarty = new JLabel();
 
 //        elementy do panelu opcje
         labelPowitaniePoImieniu = new JLabel(String.format("Sz. P. %s %s", imie, nazwisko));
@@ -97,113 +98,44 @@ public class Main extends JFrame implements Runnable {
         buttonWplacPieniadze = new JButton("Wpłać pieniądze");
 
 //        panel powitalny
-        panelPowitalny = new JPanel();
-        BoxLayout layoutPowitalny = new BoxLayout(panelPowitalny,BoxLayout.Y_AXIS);
-        panelPowitalny.setLayout(layoutPowitalny);
+        panelAktywny = new JPanel();
+        BoxLayout layoutPowitalny = new BoxLayout(panelAktywny,BoxLayout.Y_AXIS);
+        panelAktywny.setLayout(layoutPowitalny);
         labelPrzywitanieKarta.setIcon(karta);
 
         numerAktywnegoPanelu = 1;
-        panelPowitalny.add(labelPrzywitanieKarta);
-        panelPowitalny.add(labelPodajNrKarty);
-        panelPowitalny.add(textNumerKartyPole);
-        panelPowitalny.add(buttonPotwierdzenie);
-//        elementy po poprawnym wykryciu numeru karty
+        changePanel(1);
 
-
-//        panel z opcjami - po zalogowaniu
-        panelOpcje = new JPanel();
-        BoxLayout layoutOpcje = new BoxLayout(panelOpcje,BoxLayout.Y_AXIS);
-        panelOpcje.setLayout(layoutOpcje);
-
-        panelOpcje.add(labelPowitaniePoImieniu);
-        panelOpcje.add(buttonWyswietlSrodki);
-        panelOpcje.add(buttonWyplacPieniadze);
-        panelOpcje.add(buttonWplacPieniadze);
-
-        add(panelPowitalny);
+        add(panelAktywny);
 
         buttonPotwierdzenie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean jestKarta = false;
-
                 if (numerAktywnegoPanelu == 1) {
-                    kartaPlatnicza = new KartaPlatnicza();
-                    for (KartaPlatnicza kp : klienci) {
-                        jestKarta = kp.getNumerKarty().equals(textNumerKartyPole.getText().replaceAll("\\s+", ""));
-                        if (jestKarta) {
-                            if (kp.getProducentKarty().toString().equals("visa")) {
-                                kartaPlatnicza = new KartaPlatniczaVisa(
-                                        kp.getImie(), kp.getNazwisko(), kp.getNumerKarty(), kp.getPIN(), kp.getSrodki());
-                            } else if (kp.getProducentKarty().toString().equals("mastercard")) {
-                                kartaPlatnicza = new KartaPlatniczaMastercard(
-                                        kp.getImie(), kp.getNazwisko(), kp.getNumerKarty(), kp.getPIN(), kp.getSrodki());
-                            }
-                            break;
-                        }
+                    kartaPlatnicza = KartaPlatnicza.czyNumerKartyZgadzaSie(textNumerKartyPole.getText(), klienci);
+
+
+//                  gdy uzytkownik podal błędny nr karty
+                    if (kartaPlatnicza == null) {
+                        changePanel(1, "Nie ma takiej karty w bazie!");
+                        return;
                     }
 
-                    if (jestKarta) {
-//                      gdy uzytkownik podal poprawnie nr karty
-                        labelPrzywitanieInfoNrKarty = new JLabel(String.format("Numer karty: %s", textNumerKartyPole.getText()));
-                        numerAktywnegoPanelu = 2;
-                        panelPowitalny.add(labelPrzywitanieKarta);
-                        panelPowitalny.add(labelPrzywitanieInfoNrKarty);
-                        panelPowitalny.remove(labelPodajNrKarty);
-                        panelPowitalny.remove(textNumerKartyPole);
-                        panelPowitalny.add(labelPodajPin);
-                        panelPowitalny.add(textPinPole);
-                        panelPowitalny.remove(labelBledneDane);
-                    } else {
-//                      gdy uzytkownik podal błędny nr karty
-                        labelBledneDane = new JLabel("Nie ma takiej karty w bazie!");
-                        panelPowitalny.add(labelPrzywitanieKarta);
-                        panelPowitalny.add(labelBledneDane);
-                        panelPowitalny.add(labelPodajNrKarty);
-                        panelPowitalny.add(textNumerKartyPole);
-                    }
-                    panelPowitalny.add(buttonPotwierdzenie);
-                    SwingUtilities.updateComponentTreeUI(panelPowitalny);
+//                  gdy uzytkownik podal poprawnie nr karty
+                    changePanel(2);
+
                 } else if (numerAktywnegoPanelu == 2) {
-                    if (textPinPole.getText().length() != 0) {
-                        if (kartaPlatnicza.getPIN() == Short.parseShort(textPinPole.getText())) {
-//                        gdy użytkownik podał poprawny kod PIN
-                            numerAktywnegoPanelu = 3;
-                            remove(panelPowitalny);
-                            add(panelOpcje);
-                            System.out.println("test");
-                        } else {
-//                      gdy uzytkownik podal bledny PIN
-                            labelBledneDane = new JLabel("Podałeś błędny PIN!");
-                            numerAktywnegoPanelu = 1;
-                            panelPowitalny.remove(labelPrzywitanieInfoNrKarty);
-                            panelPowitalny.add(labelBledneDane);
-                            panelPowitalny.add(labelPrzywitanieKarta);
-                            panelPowitalny.add(textNumerKartyPole);
-                            panelPowitalny.remove(labelPodajPin);
-                            panelPowitalny.remove(textPinPole);
-                            panelPowitalny.add(buttonPotwierdzenie);
-                            SwingUtilities.updateComponentTreeUI(panelPowitalny);
-                        }
+                    if (textPinPole.getText().length() == 0) return;
+
+//                  gdy użytkownik podał poprawny kod PIN
+                    if (kartaPlatnicza.getPIN() == Short.parseShort(textPinPole.getText())) {
+                        changePanel(3);
+                        return;
                     }
+
+//                  gdy uzytkownik podal bledny PIN
+                    changePanel(1, "Podałeś błędny PIN!");
                 }
-
-
-//                if(textNumerKartyPole.getText().isEmpty())
-//                {
-//                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-//                            "Podaj numer swojej karty płatniczej!");
-//                }
-//                if(textPinPole.getText().isEmpty())
-//                {
-//                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-//                            "Podaj PIN swojej karty płatniczej!");
-//                }
-//                if(textNumerKartyPole.getText().isEmpty() && textPinPole.getText().isEmpty())
-//                {
-//                    JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
-//                            "Podaj numer swojej karty płatniczej i jej PIN!");
-//                }
             }
         });
     }
@@ -216,6 +148,58 @@ public class Main extends JFrame implements Runnable {
 
     private JFrame getMainWindow() {
         return this;
+    }
+
+    private void changePanel(int stage) {
+        changePanel(stage, null);
+    }
+
+    private void changePanel(int stage, String err) {
+        panelAktywny.remove(labelBledneDane);
+        /*
+            stage:
+            1 (default): panel do podania nr karty
+            2: panel do podania nr pin
+            3: panel z wyborem opcji
+         */
+        if (stage == 2) {
+            numerAktywnegoPanelu = 2;
+            labelPrzywitanieInfoNrKarty = new JLabel(String.format("Numer karty: %s", textNumerKartyPole.getText()));
+//            panelAktywny.add(labelPrzywitanieKarta);
+            panelAktywny.add(labelPrzywitanieInfoNrKarty);
+            panelAktywny.remove(labelPodajNrKarty);
+            panelAktywny.remove(textNumerKartyPole);
+            panelAktywny.add(labelPodajPin);
+            panelAktywny.add(textPinPole);
+            panelAktywny.remove(labelBledneDane);
+        } else if (stage == 3) {
+            numerAktywnegoPanelu = 3;
+            panelAktywny.remove(labelPrzywitanieKarta);
+            panelAktywny.remove(labelPrzywitanieInfoNrKarty);
+            panelAktywny.remove(labelPodajPin);
+            panelAktywny.remove(textPinPole);
+
+            panelAktywny.add(labelPowitaniePoImieniu);
+            panelAktywny.add(buttonWyswietlSrodki);
+            panelAktywny.add(buttonWyplacPieniadze);
+            panelAktywny.add(buttonWplacPieniadze);
+
+        } else {
+            numerAktywnegoPanelu = 1;
+            panelAktywny.add(labelPrzywitanieKarta);
+            if (err != null) {
+                labelBledneDane = new JLabel("Nie ma takiej karty w bazie!");
+                panelAktywny.add(labelBledneDane);
+            }
+            panelAktywny.add(labelPodajNrKarty);
+            panelAktywny.add(textNumerKartyPole);
+
+            panelAktywny.remove(labelPrzywitanieInfoNrKarty);
+            panelAktywny.remove(labelPodajPin);
+            panelAktywny.remove(textPinPole);
+        }
+        panelAktywny.add(buttonPotwierdzenie);
+        SwingUtilities.updateComponentTreeUI(panelAktywny);
     }
 
     class WindowClosingListener extends WindowAdapter {
