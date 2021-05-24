@@ -27,6 +27,7 @@ public class Main extends JFrame implements Runnable {
     private JLabel labelPrzywitanieInfoNrKarty;
     private JLabel labelBledneDane;
     private JLabel labelPowitaniePoImieniu;
+    private JLabel labelWyswietlanieSrodkow;
 
     private JTextField textNumerKartyPole;
     private JTextField textPinPole;
@@ -45,6 +46,7 @@ public class Main extends JFrame implements Runnable {
 
     ArrayList<KartaPlatnicza> klienci;
     KartaPlatnicza kartaPlatnicza;
+
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Main("Bank"));
@@ -229,7 +231,9 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWyplacPieniadze);
             panelAktywny.remove(buttonWplacPieniadze);
             panelAktywny.remove(buttonWyloguj);
-
+            labelWyswietlanieSrodkow = new JLabel(
+                    String.format("Masz %.2f pieniędzy na koncie!", kartaPlatnicza.srodki));
+            panelAktywny.add(labelWyswietlanieSrodkow);
             panelAktywny.add(buttonPotwierdzenie);
         } else if (stage == 5) {
             numerAktywnegoPanelu = 5;
