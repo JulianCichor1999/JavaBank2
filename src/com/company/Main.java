@@ -266,7 +266,7 @@ public class Main extends JFrame implements Runnable {
 
             panelAktywny.add(labelPrzywitanieKarta);
             if (err != null) {
-                labelBledneDane = new JLabel("Nie ma takiej karty w bazie!");
+                labelBledneDane = new JLabel(err);
                 panelAktywny.add(labelBledneDane);
             }
             panelAktywny.add(labelPodajNrKarty);
