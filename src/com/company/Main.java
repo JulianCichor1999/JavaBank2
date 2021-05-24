@@ -97,6 +97,7 @@ public class Main extends JFrame implements Runnable {
 
 //        elementy do panelu opcje
         labelPowitaniePoImieniu = new JLabel("");
+        labelWyswietlanieSrodkow = new JLabel("");
         buttonWyswietlSrodki = new JButton("Wyświetl środki");
         buttonWyplacPieniadze = new JButton("Wypłać pieniądze");
         buttonWplacPieniadze = new JButton("Wpłać pieniądze");
@@ -214,6 +215,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(labelPodajPin);
             panelAktywny.remove(textPinPole);
             panelAktywny.remove(buttonPotwierdzenie);
+            panelAktywny.remove(labelWyswietlanieSrodkow);
 
             labelPowitaniePoImieniu = new JLabel(
                     String.format("Sz. P. %s %s", kartaPlatnicza.getImie(), kartaPlatnicza.getNazwisko()));
@@ -222,6 +224,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.add(buttonWyplacPieniadze);
             panelAktywny.add(buttonWplacPieniadze);
             panelAktywny.add(buttonWyloguj);
+
 
         } else if (stage == 4) {
             numerAktywnegoPanelu = 4;
@@ -267,6 +270,8 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWyplacPieniadze);
             panelAktywny.remove(buttonWplacPieniadze);
             panelAktywny.remove(buttonWyloguj);
+
+            panelAktywny.remove(labelWyswietlanieSrodkow);
 
             panelAktywny.add(labelPrzywitanieKarta);
             if (err != null) {
