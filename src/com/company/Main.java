@@ -172,7 +172,7 @@ public class Main extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
     }
 
@@ -280,15 +280,17 @@ public class Main extends JFrame implements Runnable {
     class WindowClosingListener extends WindowAdapter {
         @Override
         public void windowClosing(WindowEvent e) {
-            if (0 == JOptionPane.showOptionDialog(e.getWindow(),
+            int pomocnicza = JOptionPane.showOptionDialog(e.getWindow(),
                     "Czy chcesz zamknąć okno?",
                     "Potwierdzenie",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     new String[] {"Tak", "Nie"},
-                    1)
-            ) System.exit(0);
+                    1);
+            if (pomocnicza == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
         }
     }
 
