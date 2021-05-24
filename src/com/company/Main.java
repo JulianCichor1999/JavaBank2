@@ -136,6 +136,9 @@ public class Main extends JFrame implements Runnable {
 //                  gdy uzytkownik podal bledny PIN
                     changePanel(1, "Podałeś błędny PIN!");
                 }
+                else if (numerAktywnegoPanelu == 3) {
+                    changePanel(1);
+                }
             }
         });
     }
@@ -172,12 +175,15 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.add(labelPodajPin);
             panelAktywny.add(textPinPole);
             panelAktywny.remove(labelBledneDane);
+
+            panelAktywny.add(buttonPotwierdzenie);
         } else if (stage == 3) {
             numerAktywnegoPanelu = 3;
             panelAktywny.remove(labelPrzywitanieKarta);
             panelAktywny.remove(labelPrzywitanieInfoNrKarty);
             panelAktywny.remove(labelPodajPin);
             panelAktywny.remove(textPinPole);
+            panelAktywny.remove(buttonPotwierdzenie);
 
             panelAktywny.add(labelPowitaniePoImieniu);
             panelAktywny.add(buttonWyswietlSrodki);
@@ -197,8 +203,14 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(labelPrzywitanieInfoNrKarty);
             panelAktywny.remove(labelPodajPin);
             panelAktywny.remove(textPinPole);
+
+            panelAktywny.remove(labelPowitaniePoImieniu);
+            panelAktywny.remove(buttonWyswietlSrodki);
+            panelAktywny.remove(buttonWyplacPieniadze);
+            panelAktywny.remove(buttonWplacPieniadze);
+
+            panelAktywny.add(buttonPotwierdzenie);
         }
-        panelAktywny.add(buttonPotwierdzenie);
         SwingUtilities.updateComponentTreeUI(panelAktywny);
     }
 
@@ -238,7 +250,11 @@ public class Main extends JFrame implements Runnable {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-//            do zrobienia
+            changePanel(1);
+
+            textNumerKartyPole.setText("");
+            textPinPole.setText("");
+
         }
     }
 

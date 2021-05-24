@@ -94,6 +94,6 @@ public class KartaPlatnicza extends KartaPlatniczaAbstract {
                 return kartaPlatnicza;
             }
         }
-        return kartaPlatnicza;
+        return null;
     }
 }
