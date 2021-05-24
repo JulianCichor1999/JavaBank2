@@ -28,15 +28,20 @@ public class Main extends JFrame implements Runnable {
     private JLabel labelBledneDane;
     private JLabel labelPowitaniePoImieniu;
     private JLabel labelWyswietlanieSrodkow;
+    private JLabel labelWyplata;
+    private JLabel labelWplata;
 
     private JTextField textNumerKartyPole;
     private JTextField textPinPole;
+    private JTextField textWyplacanePieniadze;
+    private JTextField textWplacanePieniadze;
 
     private JButton buttonPotwierdzenie;
     private JButton buttonWyswietlSrodki;
     private JButton buttonWyplacPieniadze;
     private JButton buttonWplacPieniadze;
     private JButton buttonWyloguj;
+    private JButton buttonWyplac;
 
     private ImageIcon karta;
 
@@ -46,6 +51,7 @@ public class Main extends JFrame implements Runnable {
 
     ArrayList<KartaPlatnicza> klienci;
     KartaPlatnicza kartaPlatnicza;
+
 
 
     public static void main(String[] args) {
@@ -89,11 +95,18 @@ public class Main extends JFrame implements Runnable {
         labelPrzywitanieKarta.setIcon(karta);
         textNumerKartyPole = new JTextField(10);
         textPinPole = new JTextField(4);
+        textWyplacanePieniadze = new JTextField();
         buttonPotwierdzenie = new JButton("Potwierdź");
+        buttonWyplac = new JButton("Wypłać");
         labelPodajNrKarty = new JLabel("Witamy w banku! Podaj swój numer karty płatniczej!");
         labelPodajPin = new JLabel("Podaj PIN:");
         labelBledneDane = new JLabel("Podałeś błędne dane!");
         labelPrzywitanieInfoNrKarty = new JLabel();
+        labelWyplata = new JLabel();
+        labelWplata = new JLabel();
+        textWplacanePieniadze = new JTextField();
+        buttonWyplac = new JButton("Wpłać");
+
 
 //        elementy do panelu opcje
         labelPowitaniePoImieniu = new JLabel("");
@@ -200,6 +213,10 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(labelPodajNrKarty);
             panelAktywny.remove(textNumerKartyPole);
             panelAktywny.remove(labelBledneDane);
+            panelAktywny.remove(labelPodajNrKarty);
+            panelAktywny.remove(textNumerKartyPole);
+            panelAktywny.remove(labelBledneDane);
+
 
             labelPrzywitanieInfoNrKarty = new JLabel(String.format("Numer karty: %s", textNumerKartyPole.getText()));
             panelAktywny.add(labelPrzywitanieInfoNrKarty);
@@ -216,6 +233,10 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(textPinPole);
             panelAktywny.remove(buttonPotwierdzenie);
             panelAktywny.remove(labelWyswietlanieSrodkow);
+            panelAktywny.remove(labelWyplata);
+            panelAktywny.remove(textWyplacanePieniadze);
+            panelAktywny.remove(labelWplata);
+            panelAktywny.remove(textWplacanePieniadze); 
 
             labelPowitaniePoImieniu = new JLabel(
                     String.format("Sz. P. %s %s", kartaPlatnicza.getImie(), kartaPlatnicza.getNazwisko()));
@@ -246,7 +267,12 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWyplacPieniadze);
             panelAktywny.remove(buttonWplacPieniadze);
             panelAktywny.remove(buttonWyloguj);
-
+            labelWyplata = new JLabel(
+                    String.format("Ile chcesz wypłacić pieniędzy:"));
+            textWyplacanePieniadze = new JTextField();
+            buttonWyplac = new JButton("Wypłać");
+            panelAktywny.add(labelWyplata);
+            panelAktywny.add(textWyplacanePieniadze);
             panelAktywny.add(buttonPotwierdzenie);
         } else if (stage == 6) {
             numerAktywnegoPanelu = 6;
@@ -256,7 +282,12 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWyplacPieniadze);
             panelAktywny.remove(buttonWplacPieniadze);
             panelAktywny.remove(buttonWyloguj);
-
+            labelWplata = new JLabel(
+                    String.format("Ile chcesz wpłacić pieniędzy:"));
+            textWplacanePieniadze = new JTextField();
+            buttonWyplac = new JButton("Wpłać");
+            panelAktywny.add(labelWplata);
+            panelAktywny.add(textWplacanePieniadze);
             panelAktywny.add(buttonPotwierdzenie);
         } else {
             numerAktywnegoPanelu = 1;
@@ -272,6 +303,10 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWyloguj);
 
             panelAktywny.remove(labelWyswietlanieSrodkow);
+            panelAktywny.remove(labelWyplata);
+            panelAktywny.remove(textWyplacanePieniadze);
+            panelAktywny.remove(labelWplata);
+            panelAktywny.remove(textWplacanePieniadze);
 
             panelAktywny.add(labelPrzywitanieKarta);
             if (err != null) {
