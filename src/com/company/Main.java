@@ -167,6 +167,10 @@ public class Main extends JFrame implements Runnable {
                     }
                     changePanel(3);
                 }
+                else if (numerAktywnegoPanelu == 6) {
+                        kartaPlatnicza.doliczSrodki(Float.parseFloat(textWplacanePieniadze.getText()));
+                    changePanel(3);
+                }
                 else {
                     changePanel(3);
                 }
