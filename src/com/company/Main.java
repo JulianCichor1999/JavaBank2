@@ -157,7 +157,17 @@ public class Main extends JFrame implements Runnable {
                 }
                 else if (numerAktywnegoPanelu == 3) {
                     changePanel(1);
-                } else {
+                } else if (numerAktywnegoPanelu == 5) {
+                    try {
+                        kartaPlatnicza.wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText()));
+                    } catch (NiewystarczajaceSrodkiException niewystarczajaceSrodkiException) {
+                        niewystarczajaceSrodkiException.printStackTrace();
+                    } catch (ZeroWyplataException zeroWyplataException) {
+                        zeroWyplataException.printStackTrace();
+                    }
+                    changePanel(3);
+                }
+                else {
                     changePanel(3);
                 }
             }
