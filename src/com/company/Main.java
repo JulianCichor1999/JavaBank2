@@ -313,6 +313,13 @@ public class Main extends JFrame implements Runnable {
             labelWplata = new JLabel(
                     String.format("Ile chcesz wpłacić pieniędzy:"));
             textWplacanePieniadze = new JTextField();
+            if(textWplacanePieniadze.getText()=="")
+            {
+                JOptionPane.showMessageDialog(null,
+                        "Eggs are not supposed to be green.",
+                        "Inane warning",
+                        panelAktywny.getWindow().WARNING_MESSAGE);
+            }
             buttonWyplac = new JButton("Wpłać");
             panelAktywny.add(labelWplata);
             panelAktywny.add(textWplacanePieniadze);
