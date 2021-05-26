@@ -164,6 +164,11 @@ public class Main extends JFrame implements Runnable {
                 } else if (numerAktywnegoPanelu == 5) {
                     try {
                         kartaPlatnicza.wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText()));
+                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Trwa wypłacanie gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+                        //Info o zakończeniu wypłaty pasuje jeszcze troszki poprawić
+
                     } catch (NiewystarczajaceSrodkiException niewystarczajaceSrodkiException) {
                         niewystarczajaceSrodkiException.printStackTrace();
                     } catch (ZeroWyplataException zeroWyplataException) {
@@ -173,6 +178,11 @@ public class Main extends JFrame implements Runnable {
                 }
                 else if (numerAktywnegoPanelu == 6) {
                         kartaPlatnicza.doliczSrodki(Float.parseFloat(textWplacanePieniadze.getText()));
+                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Oczekiwanie na wpłatę gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+                        //Info o zakończeniu wpłaty też pasuje jeszcze troszki poprawić
+
                     changePanel(3);
                 }
                 else {
