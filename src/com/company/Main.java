@@ -43,6 +43,7 @@ public class Main extends JFrame implements Runnable {
     private JButton buttonWyloguj;
     private JButton buttonWyplac;
     private JButton buttonPowrot;
+    private JButton buttonPowrotPIN;
 
     private ImageIcon karta;
 
@@ -108,6 +109,7 @@ public class Main extends JFrame implements Runnable {
         textWplacanePieniadze = new JTextField();
         buttonWyplac = new JButton("Wpłać");
         buttonPowrot = new JButton("Powrót");
+        buttonPowrotPIN = new JButton("Powrót");
 
 
 //        elementy do panelu opcje
@@ -136,7 +138,8 @@ public class Main extends JFrame implements Runnable {
 
 //                  gdy uzytkownik podal błędny nr karty
                     if (kartaPlatnicza == null) {
-                        changePanel(1, "Nie ma takiej karty w bazie!");
+                        JOptionPane.showMessageDialog(null, "Nie znaleziono karty o podanym numerze w naszym banku.", "Brak karty", JOptionPane.ERROR_MESSAGE);
+                        //changePanel(1, "Nie ma takiej karty w bazie!");
                         return;
                     }
 
@@ -153,7 +156,8 @@ public class Main extends JFrame implements Runnable {
                     }
 
 //                  gdy uzytkownik podal bledny PIN
-                    changePanel(1, "Podałeś błędny PIN!");
+                    //changePanel(1, "Podałeś błędny PIN!");
+                    JOptionPane.showMessageDialog(null, "Wprowadzono niepoprawny numer PIN.", "Błąd uwierzytelnienia", JOptionPane.ERROR_MESSAGE);
                 }
                 else if (numerAktywnegoPanelu == 3) {
                     changePanel(1);
@@ -181,6 +185,13 @@ public class Main extends JFrame implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 changePanel(3);
+            }
+        });
+
+        buttonPowrotPIN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changePanel(1);
             }
         });
 
@@ -247,6 +258,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.add(textPinPole);
 
             panelAktywny.add(buttonPotwierdzenie);
+            panelAktywny.add(buttonPowrotPIN);
         } else if (stage == 3) {
             numerAktywnegoPanelu = 3;
 
@@ -261,6 +273,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(labelWplata);
             panelAktywny.remove(textWplacanePieniadze);
             panelAktywny.remove(buttonPowrot);
+            panelAktywny.remove(buttonPowrotPIN);
 
             labelPowitaniePoImieniu = new JLabel(
                     String.format("Sz. P. %s %s", kartaPlatnicza.getImie(), kartaPlatnicza.getNazwisko()));
@@ -313,13 +326,15 @@ public class Main extends JFrame implements Runnable {
             labelWplata = new JLabel(
                     String.format("Ile chcesz wpłacić pieniędzy:"));
             textWplacanePieniadze = new JTextField();
-            if(textWplacanePieniadze.getText()=="")
+
+            /*if(textWplacanePieniadze.getText()=="")
             {
                 JOptionPane.showMessageDialog(null,
                         "Eggs are not supposed to be green.",
                         "Inane warning",
                         panelAktywny.getWindow().WARNING_MESSAGE);
-            }
+            }*/
+
             buttonWyplac = new JButton("Wpłać");
             panelAktywny.add(labelWplata);
             panelAktywny.add(textWplacanePieniadze);
@@ -338,6 +353,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWyplacPieniadze);
             panelAktywny.remove(buttonWplacPieniadze);
             panelAktywny.remove(buttonWyloguj);
+            panelAktywny.remove(buttonPowrotPIN);
 
             panelAktywny.remove(labelWyswietlanieSrodkow);
             panelAktywny.remove(labelWyplata);
