@@ -66,10 +66,10 @@ public class KartaPlatnicza extends KartaPlatniczaAbstract {
         }
     }
 
-    public void doliczSrodki(double noweSrodki) {
+    public String doliczSrodki(double noweSrodki) {
         System.out.println(Polaczenie);
         srodki += noweSrodki;
-        System.out.printf("Wpłacono %.2f pieniędzy do konta\n", noweSrodki);
+        return String.format("Wpłacono %.2f pieniędzy do konta\n", noweSrodki);
     }
 
     @Override
@@ -78,9 +78,10 @@ public class KartaPlatnicza extends KartaPlatniczaAbstract {
                 getImie(), getNazwisko(), getNumerKarty(), getPIN(), getSrodki(), getProducentKarty());
     }
 
-    public static KartaPlatnicza czyNumerKartyZgadzaSie(String numerKarty, ArrayList<KartaPlatnicza> klienci) {
+    public static int czyNumerKartyZgadzaSie(String numerKarty, ArrayList<KartaPlatnicza> klienci) {
         boolean jestKarta = false;
         KartaPlatnicza kartaPlatnicza = null;
+        int id = 0;
         for (KartaPlatnicza kp : klienci) {
             jestKarta = kp.getNumerKarty().equals(numerKarty.replaceAll("\\s+", ""));
             if (jestKarta) {
@@ -91,9 +92,10 @@ public class KartaPlatnicza extends KartaPlatniczaAbstract {
                     kartaPlatnicza = new KartaPlatniczaMastercard(
                             kp.getImie(), kp.getNazwisko(), kp.getNumerKarty(), kp.getPIN(), kp.getSrodki());
                 }
-                return kartaPlatnicza;
+                return id;
             }
+            id++;
         }
-        return null;
+        return -1;
     }
 }

@@ -12,12 +12,12 @@ public class KartaPlatniczaVisa extends KartaPlatnicza implements Transakcja{
         setProducentKarty(Producenci.VISA);
     }
 
-    public void doliczSrodki(double noweSrodki) {
+    public String doliczSrodki(double noweSrodki) {
         System.out.println(Polaczenie);
         wplacanie();
         noweSrodki *= 1.05;
         srodki += noweSrodki;
-        System.out.printf("Wpłacono %.2f (doliczono 5%s premii dla posiadaczy karty VISA) pieniędzy do konta\n", noweSrodki, "%");
+        return String.format("Wpłacono %.2f (doliczono 5%s premii dla posiadaczy karty VISA) pieniędzy do konta\n", noweSrodki, "%");
     }
 
 }

@@ -52,7 +52,8 @@ public class Main extends JFrame implements Runnable {
     private JPanel panelAktywny;
 
     ArrayList<KartaPlatnicza> klienci;
-    KartaPlatnicza kartaPlatnicza;
+    int aktywnaKarta = -1;
+//    KartaPlatnicza kartaPlatnicza;
 
 
 
@@ -133,11 +134,11 @@ public class Main extends JFrame implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (numerAktywnegoPanelu == 1) {
-                    kartaPlatnicza = KartaPlatnicza.czyNumerKartyZgadzaSie(textNumerKartyPole.getText(), klienci);
+                    aktywnaKarta = KartaPlatnicza.czyNumerKartyZgadzaSie(textNumerKartyPole.getText(), klienci);
 
 
 //                  gdy uzytkownik podal błędny nr karty
-                    if (kartaPlatnicza == null) {
+                    if (aktywnaKarta == -1) {
                         JOptionPane.showMessageDialog(null, "Nie znaleziono karty o podanym numerze w naszym banku.", "Brak karty", JOptionPane.ERROR_MESSAGE);
                         //changePanel(1, "Nie ma takiej karty w bazie!");
                         return;
@@ -150,7 +151,7 @@ public class Main extends JFrame implements Runnable {
                     if (textPinPole.getText().length() == 0) return;
 
 //                  gdy użytkownik podał poprawny kod PIN
-                    if (kartaPlatnicza.getPIN() == Short.parseShort(textPinPole.getText())) {
+                    if (klienci.get(aktywnaKarta).getPIN() == Short.parseShort(textPinPole.getText())) {
                         changePanel(3);
                         return;
                     }
@@ -163,8 +164,8 @@ public class Main extends JFrame implements Runnable {
                     changePanel(1);
                 } else if (numerAktywnegoPanelu == 5) {
                     try {
-                        kartaPlatnicza.wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText()));
-                        JOptionPane.showMessageDialog(null, String.format("Wypłacono %szł", textWplacanePieniadze.getText()), "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+                        klienci.get(aktywnaKarta).wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText()));
+                        JOptionPane.showMessageDialog(null, String.format("Wypłacono %szł", textWyplacanePieniadze.getText()), "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
 //                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
 //                        JOptionPane.showMessageDialog(null, "Trwa wypłacanie gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
 //                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
@@ -183,8 +184,8 @@ public class Main extends JFrame implements Runnable {
                 }
                 else if (numerAktywnegoPanelu == 6) {
                     try {
-                        kartaPlatnicza.doliczSrodki(Float.parseFloat(textWplacanePieniadze.getText()));
-                        JOptionPane.showMessageDialog(null, String.format("Wpłacono %szł", textWplacanePieniadze.getText()), "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+                        String kwotaWplaty = klienci.get(aktywnaKarta).doliczSrodki(Float.parseFloat(textWplacanePieniadze.getText()));
+                        JOptionPane.showMessageDialog(null, kwotaWplaty, "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
 //                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
 //                        JOptionPane.showMessageDialog(null, "Oczekiwanie na wpłatę gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
 //                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
@@ -298,7 +299,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonPowrotPIN);
 
             labelPowitaniePoImieniu = new JLabel(
-                    String.format("Sz. P. %s %s", kartaPlatnicza.getImie(), kartaPlatnicza.getNazwisko()));
+                    String.format("Sz. P. %s %s", klienci.get(aktywnaKarta).getImie(), klienci.get(aktywnaKarta).getNazwisko()));
             panelAktywny.add(labelPowitaniePoImieniu);
             panelAktywny.add(buttonWyswietlSrodki);
             panelAktywny.add(buttonWyplacPieniadze);
@@ -314,7 +315,7 @@ public class Main extends JFrame implements Runnable {
             panelAktywny.remove(buttonWplacPieniadze);
             panelAktywny.remove(buttonWyloguj);
             labelWyswietlanieSrodkow = new JLabel(
-                    String.format("Masz %.2f pieniędzy na koncie!", kartaPlatnicza.srodki));
+                    String.format("Masz %.2f pieniędzy na koncie!", klienci.get(aktywnaKarta).srodki));
             panelAktywny.add(labelWyswietlanieSrodkow);
             //panelAktywny.add(buttonPotwierdzenie);
             panelAktywny.add(buttonPowrot);
@@ -331,7 +332,7 @@ public class Main extends JFrame implements Runnable {
                     String.format("Ile chcesz wypłacić pieniędzy:"));
             textWyplacanePieniadze = new JTextField();
             buttonWyplac = new JButton("Wypłać");
-            //buttonWyplac.addActionListener(kartaPlatnicza.wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText())));
+//            buttonWyplac.addActionListener(klienci.get(aktywnaKarta).wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText())));
             panelAktywny.add(labelWyplata);
             panelAktywny.add(textWyplacanePieniadze);
             panelAktywny.add(buttonPotwierdzenie);
