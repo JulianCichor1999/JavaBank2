@@ -2,6 +2,8 @@ package com.company;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -83,5 +85,25 @@ public class Reader {
         }
 
         return kartaPlatnicza;
+    }
+
+    public static boolean saveKlienci(ArrayList<KartaPlatnicza> klienci) {
+        try {
+            FileWriter plik = new FileWriter("klienci.csv");
+//        System.out.println("saveKlienci");
+            for (KartaPlatnicza klient : klienci) {
+                String srodki = String.format("%.2f", klient.getSrodki()).replace(",", ".");
+                plik.write(String.format("%s,%s,%s,%d,%s,%s\n",
+                        klient.getImie(), klient.getNazwisko(), klient.getNumerKarty(), klient.getPIN(),
+                        srodki, klient.getProducentKarty().toString()));
+            }
+            plik.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            System.out.print("Wystąpił błąd pliku!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

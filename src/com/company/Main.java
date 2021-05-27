@@ -164,24 +164,36 @@ public class Main extends JFrame implements Runnable {
                 } else if (numerAktywnegoPanelu == 5) {
                     try {
                         kartaPlatnicza.wyplacPieniadze(Float.parseFloat(textWyplacanePieniadze.getText()));
-                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-                        JOptionPane.showMessageDialog(null, "Trwa wypłacanie gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(null, String.format("Wypłacono %szł", textWplacanePieniadze.getText()), "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+//                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+//                        JOptionPane.showMessageDialog(null, "Trwa wypłacanie gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+//                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
                         //Info o zakończeniu wypłaty pasuje jeszcze troszki poprawić
 
                     } catch (NiewystarczajaceSrodkiException niewystarczajaceSrodkiException) {
                         niewystarczajaceSrodkiException.printStackTrace();
                     } catch (ZeroWyplataException zeroWyplataException) {
                         zeroWyplataException.printStackTrace();
+                    } catch (NumberFormatException err) {
+                        JOptionPane.showMessageDialog(null, "Wprowadziłeś niepoprawne dane!", "Informacja", JOptionPane.ERROR_MESSAGE);
+                        System.out.println(err.toString());
+                        return;
                     }
                     changePanel(3);
                 }
                 else if (numerAktywnegoPanelu == 6) {
+                    try {
                         kartaPlatnicza.doliczSrodki(Float.parseFloat(textWplacanePieniadze.getText()));
-                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-                        JOptionPane.showMessageDialog(null, "Oczekiwanie na wpłatę gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(null, String.format("Wpłacono %szł", textWplacanePieniadze.getText()), "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
+//                        JOptionPane.showMessageDialog(null, "Trwa nawiązywanie połączenia...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+//                        JOptionPane.showMessageDialog(null, "Oczekiwanie na wpłatę gotówki...", "Informacja", JOptionPane.INFORMATION_MESSAGE);
+//                        JOptionPane.showMessageDialog(null, "Transakcja zakończona pomyślnie.", "Podsumowanie", JOptionPane.PLAIN_MESSAGE);
                         //Info o zakończeniu wpłaty też pasuje jeszcze troszki poprawić
+                    } catch (NumberFormatException err) {
+                        JOptionPane.showMessageDialog(null, "Wprowadziłeś niepoprawne dane!", "Informacja", JOptionPane.ERROR_MESSAGE);
+                        System.out.println(err.toString());
+                        return;
+                    }
 
                     changePanel(3);
                 }
@@ -396,6 +408,7 @@ public class Main extends JFrame implements Runnable {
                     new String[] {"Tak", "Nie"},
                     1);
             if (pomocnicza == JOptionPane.YES_OPTION) {
+                Reader.saveKlienci(klienci);
                 System.exit(0);
             }
         }
