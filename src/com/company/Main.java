@@ -66,7 +66,7 @@ public class Main extends JFrame implements Runnable {
         super(title);
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension dim = tk.getScreenSize();
-        setSize(new Dimension(dim.width / 2, dim.height / 2));
+        setSize(new Dimension(640, 440));
         setLocation(dim.width / 4, dim.height / 4);
         setContentPane(new JPanel());
 
